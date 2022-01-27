@@ -612,7 +612,7 @@ Assignment* TaskAssignment::insertTask(Agent* a,Task* task, bool real_cost){
     int min_cost_increase = INT_MAX/2;
     int start_action = assignments[a->agent_id].start_action+1;
 
-
+    
     for (int pick = start_action; pick < assignments[a->agent_id].actions.size(); pick++ ) {
         for (int drop = pick + 1; drop < assignments[a->agent_id].actions.size() + 1; drop++) {
 

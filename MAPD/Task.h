@@ -28,6 +28,7 @@ public:
     int goal_location;
     int task_id;
     int ideal_end_time;
+    int finished_time;
     TaskState state= TaskState::NONE;
 
     struct compare_task

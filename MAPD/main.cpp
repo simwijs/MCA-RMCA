@@ -257,7 +257,8 @@ int main(int argc, char** argv){
         cout <<"1"<<","<<agentLoader->num_of_agents<<
               ","<<taskLoader->num_of_tasks<<
               ","<< ideal_cost <<","<<total_cost << "," << ideal_delay <<","<< total_delay << ","
-              <<taskAssignment->current_makespan<<","<<taskAssignment->current_makespan<<","
+              <<taskAssignment->current_makespan<<","<<taskAssignment->current_makespan<<"," 
+              << taskAssignment->current_total_service_time/taskLoader->num_of_tasks << ","
               << taskAssignment->get_num_agents_with_tasks()<< "," << online.runtime / CLOCKS_PER_SEC
               << "," << taskAssignment->runtime_pp / CLOCKS_PER_SEC
               << "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC <<
@@ -275,6 +276,7 @@ int main(int argc, char** argv){
                   ","<<taskLoader->num_of_tasks<<
                   ","<< ideal_cost <<","<<total_cost << "," << ideal_delay <<","<< total_delay << ","
                   <<taskAssignment->current_makespan<<","<<taskAssignment->current_makespan<<","
+                  << taskAssignment->current_total_service_time/ (double) taskLoader->num_of_tasks << ","
                   << taskAssignment->get_num_agents_with_tasks()<< "," << taskAssignment->runtime / CLOCKS_PER_SEC
                   << "," << taskAssignment->runtime_pp / CLOCKS_PER_SEC
                   << "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC <<

@@ -140,6 +140,9 @@ bool OnlineSimu::updateAgentStatus(int timestep){
                 unfinished_tasks.erase(actions[agentStatus[a->agent_id].prevAction+1].task->task_id);
                 assert(ongoing_tasks.count(actions[agentStatus[a->agent_id].prevAction+1].task->task_id));
                 ongoing_tasks.erase(actions[agentStatus[a->agent_id].prevAction+1].task->task_id);
+                // HERE 
+                // actions[agentStatus[a->agent_id].prevAction + 1].task->finished_time = timestep;
+                taskAssignment->current_total_service_time += timestep - actions[agentStatus[a->agent_id].prevAction + 1].task->initial_time;
                 finished_tasks.insert(actions[agentStatus[a->agent_id].prevAction+1].task->task_id);
 
             }
