@@ -77,6 +77,11 @@ struct Assignment{
         // returns true if t1 > t2 (note -- this gives us *min*-heap).
         bool operator()(const Assignment* t1, const Assignment* t2) const
         {
+            // TODO(simon) add a heuristic here that for instance combines all the below
+            // values, subtracting the inital time
+            // Ex1: take the diff in initial time and multiply with cost increase.
+            // Ex2: Optimize this function by a function consisting of the cost_increase, path size,
+            // ideal cost, and the task arrival time.
             if (t1->cost_increase == t2->cost_increase){
                 if (t1->path.size() == t2->path.size()){
                     if( t1->ideal_cost == t2->ideal_cost){

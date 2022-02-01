@@ -253,38 +253,29 @@ int main(int argc, char** argv){
             total_delay +=assign.current_total_delay;
         }
 
-        if (screen >=1)
-        cout <<"1"<<","<<agentLoader->num_of_agents<<
-              ","<<taskLoader->num_of_tasks<<
-              ","<< ideal_cost <<","<<total_cost << "," << ideal_delay <<","<< total_delay << ","
-              <<taskAssignment->current_makespan<<","<<taskAssignment->current_makespan<<"," 
-              << taskAssignment->current_total_service_time/taskLoader->num_of_tasks << ","
-              << taskAssignment->get_num_agents_with_tasks()<< "," << online.runtime / CLOCKS_PER_SEC
-              << "," << taskAssignment->runtime_pp / CLOCKS_PER_SEC
-              << "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC <<
-              "," << taskAssignment->runtime_update_changed_agent / CLOCKS_PER_SEC<<
-              ","<< taskAssignment->num_of_pp <<
-              ","<< taskAssignment->num_conflict_updates<<
-              ","<< taskAssignment->num_task_assign_updates<<
-              "," <<endl;
+        if (screen >= 1)
+            cout << "1"
+                 << "," << agentLoader->num_of_agents << "," << taskLoader->num_of_tasks << "," << ideal_cost << "," << total_cost << "," << ideal_delay << "," << total_delay << ","
+                 << taskAssignment->current_makespan << "," << taskAssignment->current_makespan << ","
+                 // Simon #6
+                 << taskAssignment->current_total_service_time / taskLoader->num_of_tasks << ","
+                 << taskAssignment->get_num_agents_with_tasks() << "," << online.runtime / CLOCKS_PER_SEC
+                 << "," << taskAssignment->runtime_pp / CLOCKS_PER_SEC
+                 << "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC << "," << taskAssignment->runtime_update_changed_agent / CLOCKS_PER_SEC << "," << taskAssignment->num_of_pp << "," << taskAssignment->num_conflict_updates << "," << taskAssignment->num_task_assign_updates << "," << endl;
 
-        if (output!="") {
+        if (output != "")
+        {
 
             ofstream stats;
             stats.open(output, ios::app);
-            stats <<"1"<<","<<agentLoader->num_of_agents<<
-                  ","<<taskLoader->num_of_tasks<<
-                  ","<< ideal_cost <<","<<total_cost << "," << ideal_delay <<","<< total_delay << ","
-                  <<taskAssignment->current_makespan<<","<<taskAssignment->current_makespan<<","
-                  << taskAssignment->current_total_service_time/ (double) taskLoader->num_of_tasks << ","
-                  << taskAssignment->get_num_agents_with_tasks()<< "," << taskAssignment->runtime / CLOCKS_PER_SEC
+            stats << "1"
+                  << "," << agentLoader->num_of_agents << "," << taskLoader->num_of_tasks << "," << ideal_cost << "," << total_cost << "," << ideal_delay << "," << total_delay << ","
+                  << taskAssignment->current_makespan << "," << taskAssignment->current_makespan << ","
+                  // Simon #6
+                  << taskAssignment->current_total_service_time / (double)taskLoader->num_of_tasks << ","
+                  << taskAssignment->get_num_agents_with_tasks() << "," << taskAssignment->runtime / CLOCKS_PER_SEC
                   << "," << taskAssignment->runtime_pp / CLOCKS_PER_SEC
-                  << "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC <<
-                  "," << taskAssignment->runtime_update_changed_agent / CLOCKS_PER_SEC<<
-                  ","<< taskAssignment->num_of_pp <<
-                  ","<< taskAssignment->num_conflict_updates<<
-                  ","<< taskAssignment->num_task_assign_updates<<
-                  "," <<endl;
+                  << "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC << "," << taskAssignment->runtime_update_changed_agent / CLOCKS_PER_SEC << "," << taskAssignment->num_of_pp << "," << taskAssignment->num_conflict_updates << "," << taskAssignment->num_task_assign_updates << "," << endl;
             stats.close();
         }
         if(vm.count("anytime")){
