@@ -125,28 +125,52 @@ bool OnlineSimu::updateAgentStatus(int timestep){
                 exit(1);
             }
 
+            ActionEntry ae = actions[agentStatus[a->agent_id].prevAction+1];
+            Task* task = ae.task;
+            Batch* batch = taskLoader->all_batches[task->batch_id];
             // update current load
-            if(actions[agentStatus[a->agent_id].prevAction+1].action_type==ACTION_TYPE::PICK_UP){
-                assert(!agentStatus[a->agent_id].currentLoads.count(actions[agentStatus[a->agent_id].prevAction+1].task));
-                agentStatus[a->agent_id].currentLoads.insert(actions[agentStatus[a->agent_id].prevAction+1].task);
-                assert(!ongoing_tasks.count(actions[agentStatus[a->agent_id].prevAction+1].task->task_id));
-                ongoing_tasks.insert(actions[agentStatus[a->agent_id].prevAction+1].task->task_id);
-                assert(awaiting_tasks.count(actions[agentStatus[a->agent_id].prevAction+1].task->task_id));
-                awaiting_tasks.erase(actions[agentStatus[a->agent_id].prevAction+1].task->task_id);
+            if(ae.action_type==ACTION_TYPE::PICK_UP){
+                assert(!agentStatus[a->agent_id].currentLoads.count(task));
+                agentStatus[a->agent_id].currentLoads.insert(task);
+                assert(!ongoing_tasks.count(task->task_id));
+                ongoing_tasks.insert(task->task_id);
+                assert(awaiting_tasks.count(task->task_id));
+                awaiting_tasks.erase(task->task_id);
 
             }
-            else if (actions[agentStatus[a->agent_id].prevAction+1].action_type==ACTION_TYPE::DROP_OFF) {
-                agentStatus[a->agent_id].currentLoads.erase(actions[agentStatus[a->agent_id].prevAction+1].task);
-                unfinished_tasks.erase(actions[agentStatus[a->agent_id].prevAction+1].task->task_id);
-                assert(ongoing_tasks.count(actions[agentStatus[a->agent_id].prevAction+1].task->task_id));
-                ongoing_tasks.erase(actions[agentStatus[a->agent_id].prevAction+1].task->task_id);
+            else if (ae.action_type==ACTION_TYPE::DROP_OFF) {
+                agentStatus[a->agent_id].currentLoads.erase(task);
+                unfinished_tasks.erase(task->task_id);
+                assert(ongoing_tasks.count(task->task_id));
+                ongoing_tasks.erase(task->task_id);
                 // Simon #6
-                taskAssignment->current_total_service_time += timestep - actions[agentStatus[a->agent_id].prevAction + 1].task->initial_time;
-                finished_tasks.insert(actions[agentStatus[a->agent_id].prevAction+1].task->task_id);
+                task->finish(timestep);
+                taskAssignment->current_total_service_time += task->get_service_time(); //timestep - actions[agentStatus[a->agent_id].prevAction + 1].task->initial_time;
+                
 
+
+                // Check if a batch can finish
+                batch->try_finish();
+                if (batch->is_finished()) {
+                    taskAssignment->current_total_batch_service_time += batch->get_service_time(); 
+                    // Check with current min/max batch service time 
+                    int max_time = taskAssignment->current_max_batch_service_time;
+                    int min_time = taskAssignment->current_min_batch_service_time;
+                    if (batch->get_service_time() > max_time) {
+                        taskAssignment->current_max_batch_service_time = batch->get_service_time();
+                    }
+
+                    if (batch->get_service_time() < min_time) {
+                        taskAssignment->current_min_batch_service_time = batch->get_service_time();
+                    }
+                }
+
+
+                
+                finished_tasks.insert(task->task_id);
             }
 
-            assert(agentStatus[a->agent_id].currentLoads.size() == actions[agentStatus[a->agent_id].prevAction+1].current_load);
+            assert(agentStatus[a->agent_id].currentLoads.size() == ae.current_load);
             assert(agentStatus[a->agent_id].currentLoads.size() <= a->capacity);
 
             //update prev action

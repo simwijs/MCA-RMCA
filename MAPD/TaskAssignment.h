@@ -85,6 +85,9 @@ public:
     int current_makespan = 0;
     int current_total_delay = 0;
     int current_total_service_time = 0;
+    int current_total_batch_service_time = 0;
+    int current_min_batch_service_time = INT_MAX;
+    int current_max_batch_service_time = 0;
     int start_timestep = 0;
 
     double runtime_building_heap = 0;
