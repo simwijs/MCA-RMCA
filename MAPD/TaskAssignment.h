@@ -101,6 +101,25 @@ public:
 
     int num_of_pp = 0;
 
+
+    void writePath(std::string filepath="output.yaml") const {
+        // Output the agent paths on yaml format
+        fstream file;
+        file.open(filepath, fstream::out);
+        file << "schedule:" << endl;
+        for (int agent = 0; agent < agents->agents.size(); agent++) {
+            file << "  agent" << agent<< ":" << endl;
+
+            for (auto &entry : assignments[agent].path)
+            {
+                file << "    - x: " << entry.location / map->cols << endl;
+                file << "      y: " << entry.location % map->cols << endl;
+                file << "      t: " << entry.timeStep << endl;
+
+            }
+        }
+    }
+
     void printPath()
     {
         for (int agent_id = 0; agent_id < agents->agents.size(); agent_id++)

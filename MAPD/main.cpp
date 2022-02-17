@@ -240,6 +240,7 @@ int main(int argc, char** argv){
             taskAssignment->printAssignments();
             taskAssignment->printPath();
         }
+        taskAssignment->writePath();
 
         int ideal_cost = 0;
         int ideal_delay = 0;
