@@ -62,7 +62,8 @@ int main(int argc, char** argv){
             ("anytime-log", po::value<std::string>()->default_value(""), "output file for anytime log")
             ("destory-method", po::value<std::string>()->default_value("destory-max"), "destory-max or random")
             ("online","online mode")
-            ("kiva","load kiva map and tasks");
+            ("kiva","load kiva map and tasks")
+            ("batched", "Task files have an additional number that is batch_id");
 
 
     po::variables_map temp;
@@ -130,6 +131,9 @@ int main(int argc, char** argv){
     MapLoaderCost* mapLoader;
     AgentLoader* agentLoader;
     TaskLoader* taskLoader;
+
+    bool is_batched = false;
+    if (vm.count("batched")) is_batched = true;
     if (vm.count("kiva")){
         mapLoader = new MapLoaderCost();
         agentLoader = new AgentLoader();
@@ -137,7 +141,7 @@ int main(int argc, char** argv){
 
         mapLoader->loadKiva(map);
         agentLoader->loadKiva(agent,capacity,*mapLoader);
-        taskLoader->loadKiva(task,*mapLoader);
+        taskLoader->loadKiva(task,*mapLoader, is_batched);
     }
     else{
         mapLoader = new MapLoaderCost(map);
@@ -233,7 +237,7 @@ int main(int argc, char** argv){
 
     if (vm.count("online")){
         //online mode
-        OnlineSimu online(taskAssignment, taskLoader, agentLoader, mapLoader);
+        OnlineSimu online(taskAssignment, taskLoader, agentLoader, mapLoader, is_batched);
         online.simulate(vm.count("anytime"));
 
         if (screen>=1){

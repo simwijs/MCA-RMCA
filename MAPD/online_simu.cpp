@@ -5,8 +5,7 @@
 #include "online_simu.h"
 #include <stdio.h>
 
-OnlineSimu::OnlineSimu(TaskAssignment* ta,TaskLoader* tl,AgentLoader* al, MapLoader* ml):taskAssignment(ta),taskLoader(tl),agentLoader(al),mapLoader(ml) {
-
+OnlineSimu::OnlineSimu(TaskAssignment* ta,TaskLoader* tl,AgentLoader* al, MapLoader* ml, bool is_batched):taskAssignment(ta),taskLoader(tl),agentLoader(al),mapLoader(ml),is_batched(is_batched) {
     taskQueue.resize(taskLoader->last_release_time+1);
     agentStatus.resize(agentLoader->num_of_agents);
     for(Task * t : taskLoader->all_tasks){
@@ -146,27 +145,24 @@ bool OnlineSimu::updateAgentStatus(int timestep){
                 // Simon #6
                 task->finish(timestep);
                 taskAssignment->current_total_service_time += task->get_service_time(); //timestep - actions[agentStatus[a->agent_id].prevAction + 1].task->initial_time;
-                
+                if (is_batched) {
+                    // Check if a batch can finish
+                    batch->try_finish();
+                    if (batch->is_finished()) {
+                        taskAssignment->current_total_batch_service_time += batch->get_service_time();
+                        // Check with current min/max batch service time
+                        int max_time = taskAssignment->current_max_batch_service_time;
+                        int min_time = taskAssignment->current_min_batch_service_time;
+                        if (batch->get_service_time() > max_time) {
+                            taskAssignment->current_max_batch_service_time = batch->get_service_time();
+                        }
 
-
-                // Check if a batch can finish
-                batch->try_finish();
-                if (batch->is_finished()) {
-                    taskAssignment->current_total_batch_service_time += batch->get_service_time(); 
-                    // Check with current min/max batch service time 
-                    int max_time = taskAssignment->current_max_batch_service_time;
-                    int min_time = taskAssignment->current_min_batch_service_time;
-                    if (batch->get_service_time() > max_time) {
-                        taskAssignment->current_max_batch_service_time = batch->get_service_time();
+                        if (batch->get_service_time() < min_time) {
+                            taskAssignment->current_min_batch_service_time = batch->get_service_time();
+                        }
                     }
 
-                    if (batch->get_service_time() < min_time) {
-                        taskAssignment->current_min_batch_service_time = batch->get_service_time();
-                    }
                 }
-
-
-                
                 finished_tasks.insert(task->task_id);
             }
 

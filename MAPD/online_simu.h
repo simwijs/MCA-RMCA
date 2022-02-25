@@ -17,7 +17,7 @@ struct AgentStatus{
 
 class OnlineSimu{
 public:
-    OnlineSimu(TaskAssignment* ta, TaskLoader* tl, AgentLoader* al, MapLoader* ml);
+    OnlineSimu(TaskAssignment* ta, TaskLoader* tl, AgentLoader* al, MapLoader* ml, bool is_batched);
     bool simulate(bool anytime = false);
     void initializeAssignments();
     void setTasks(int timestep);
@@ -33,6 +33,8 @@ private:
     TaskLoader* taskLoader;
     AgentLoader* agentLoader;
     MapLoader* mapLoader;
+
+    bool is_batched = false;
 
     vector<AgentStatus> agentStatus;
     vector<vector<Task*>> taskQueue;

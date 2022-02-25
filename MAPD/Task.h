@@ -66,7 +66,6 @@ public:
     Batch(int id);
 
     int initial_time;
-    int tasks_total;
     int batch_id;
     int ideal_end_time;
     int finished_time;
@@ -95,7 +94,7 @@ class TaskLoader
 public:
     TaskLoader(const std::string fname, MapLoaderCost &ml);
     TaskLoader(){};
-    void loadKiva(const std::string fname, MapLoaderCost &ml);
+    void loadKiva(const std::string fname, MapLoaderCost &ml, bool is_batched);
     int num_of_tasks;
     int last_release_time = 0;
     TaskHeap all_tasks;

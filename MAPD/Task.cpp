@@ -59,7 +59,7 @@ TaskLoader::TaskLoader(const std::string fname, MapLoaderCost &ml)
     }
 }
 
-void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml)
+void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml, bool is_batched)
 {
     string line;
     ifstream myfile(fname.c_str());
@@ -75,9 +75,7 @@ void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml)
     getline(myfile, line);
     ss << line;
     ss >> task_num; // number of tasks
-    // tasks_total.resize(task_num);
-    int current_batch = 0;
-    all_batches.push_back(new Batch(0));
+    int current_batch = -1;
     this->num_of_tasks = task_num;
     for (int i = 0; i < task_num; i++)
     {
@@ -85,7 +83,12 @@ void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml)
         getline(myfile, line);
         ss.clear();
         ss << line;
-        ss >> t >> s >> g >> ts >> tg >> batch_id; // time+start+goal+time at start+time at goal+batch
+        ss >> t >> s >> g >> ts >> tg; // time+start+goal+time at start+time at goal+batch
+        if (is_batched) {
+            ss >> batch_id;
+        } else {
+            batch_id = 0;
+        }
         s = s % ml.endpoints.size();
         g = g % ml.endpoints.size();
         assert(s < ml.endpoints.size());
@@ -100,15 +103,17 @@ void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml)
         all_tasks.push(new_task);
         all_tasks_vec.push_back(new_task);
 
-        // Add batches only if there is no batch with that id yet, otherwise add task to the batch list
-        if (batch_id > current_batch)
-        {
-            current_batch++; // If the batch ids are non-linear, this will still result in internal batch ids of 0, 1, 2, ..., n batches
-            // Create a new batch
-            all_batches.push_back(new Batch(batch_id));
+        if (is_batched) {
+            // Add batches only if there is no batch with that id yet, otherwise add task to the batch list
+            if (batch_id > current_batch)
+            {
+                current_batch++; // If the batch ids are non-linear, this will still result in internal batch ids of 0, 1, 2, ..., n batches
+                // Create a new batch
+                all_batches.push_back(new Batch(batch_id));
+            }
+            // add task to batch list
+            all_batches[current_batch]->add_task(new_task);
         }
-        // add task to batch list
-        all_batches[current_batch]->add_task(new_task);
     }
     myfile.close();
 }
