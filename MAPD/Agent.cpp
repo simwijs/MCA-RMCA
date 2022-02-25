@@ -40,25 +40,28 @@ AgentLoader::AgentLoader(const std::string fname, const MapLoaderCost &ml){
 }
 
 void AgentLoader::loadKiva(const std::string fname,int capacity, const MapLoaderCost &ml) {
-    string line;
+    string line, value;
     ifstream myfile (fname.c_str());
     if (myfile.is_open()) {
-        getline(myfile, line);
-        boost::char_separator<char> sep(",");
-        boost::tokenizer< boost::char_separator<char> > tok(line, sep);
-        boost::tokenizer< boost::char_separator<char> >::iterator beg = tok.begin();
-        int rows = atoi((*beg).c_str()) + 2; // read number of rows
-        beg++;
-        int cols = atoi((*beg).c_str()) + 2; // read number of cols
-
         stringstream ss;
+
+        getline(myfile, line);
+        ss << line;
+        int rows, cols;
+        ss >> rows >> cols;
+
+        // Endpoints
         getline(myfile, line);
         ss << line;
 
+        // Agents
         ss.clear();
         getline(myfile, line);
         ss << line;
+        int agents_in_file = 0;
+        ss >> agents_in_file;
 
+        // Unused
         ss.clear();
         getline(myfile, line);
         ss << line;
@@ -80,6 +83,10 @@ void AgentLoader::loadKiva(const std::string fname,int capacity, const MapLoader
         }
 
         myfile.close();
+        if (num_of_agents != agents_in_file) {
+            cerr << "Agents specified in map=" << agents_in_file << " found 'r' agents in map=" << num_of_agents << " remember to not put agents on the border" << std::endl;
+            exit(1);
+        }
     }
     else
     {
