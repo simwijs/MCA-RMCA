@@ -121,6 +121,21 @@ public:
         }
     }
 
+    void writeTasks(std::string filepath="task_output.yaml") const {
+
+        fstream file;
+        file.open(filepath, fstream::out);
+        file << "tasks:" << endl;
+        for (int t = 0; t < tasks->all_tasks_vec.size(); t++) {
+            Task* task = tasks->all_tasks_vec[t];
+            file << "   task" << t << ":" << endl;
+
+            file << "   - start: " << task->started_time << endl;
+            file << "     finish: " << task->finished_time << endl;
+            file << "     batch: " << task->batch_id << endl;
+        }
+    }
+
     void printPath()
     {
         for (int agent_id = 0; agent_id < agents->agents.size(); agent_id++)

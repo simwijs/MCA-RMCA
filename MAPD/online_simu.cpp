@@ -135,6 +135,7 @@ bool OnlineSimu::updateAgentStatus(int timestep){
                 ongoing_tasks.insert(task->task_id);
                 assert(awaiting_tasks.count(task->task_id));
                 awaiting_tasks.erase(task->task_id);
+                task->started_time = timestep;
 
             }
             else if (ae.action_type==ACTION_TYPE::DROP_OFF) {

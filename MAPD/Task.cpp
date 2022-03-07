@@ -13,6 +13,7 @@ Task::Task(int id, int init_t, int init_loc, int goal_loc, int bid)
     goal_location = goal_loc;
     batch_id = bid;
     finished = false;
+    started_time = -1;
 }
 
 TaskLoader::TaskLoader(const std::string fname, MapLoaderCost &ml)

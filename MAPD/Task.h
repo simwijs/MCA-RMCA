@@ -27,6 +27,7 @@ public:
     int task_id;
     int batch_id;
     int ideal_end_time;
+    int started_time; // not the same as initial time, as it may not have been picked up yet
     int finished_time;
     bool finished;
     TaskState state = TaskState::NONE;
