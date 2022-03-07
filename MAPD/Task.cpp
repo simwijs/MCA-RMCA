@@ -91,6 +91,7 @@ void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml, bool is_ba
         }
         s = s % ml.endpoints.size();
         g = g % ml.endpoints.size();
+
         assert(s < ml.endpoints.size());
         assert(g < ml.endpoints.size());
         Task *new_task = new Task(i, t, ml.endpoints[s], ml.endpoints[g], batch_id);

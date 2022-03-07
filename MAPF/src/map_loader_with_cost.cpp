@@ -40,8 +40,12 @@ void MapLoaderCost::loadKiva(string fname)
     ss << line;
     ss >> maxtime;
 
+    // Add a border outside of the read map
+    cols += 2;
+    rows += 2;
+
     bool *my_map = new bool[rows * cols];
-    // DeliverGoal.resize(row*col, false);
+
     //  read map
     int ep = 0, ag = 0;
     for (int i = 1; i < rows - 1; i++)
@@ -51,7 +55,7 @@ void MapLoaderCost::loadKiva(string fname)
         {
             my_map[cols * i + j] = (line[j - 1] == '@'); // not a block
 
-            if (line[j - 1] == 'e') // endpoint
+            if (line[j - 1] == 'e' || line[j-1] == '.' || line[j-1] == 'r') // endpoint
             {
                 endpoints.push_back(i * cols + j);
                 assert(ep == (endpoints.size() - 1));
@@ -62,11 +66,13 @@ void MapLoaderCost::loadKiva(string fname)
     myfile.close();
 
     // set the border of the map blocked
+    // left and right
     for (int i = 0; i < rows; i++)
     {
         my_map[i * cols] = false;
         my_map[i * cols + cols - 1] = false;
     }
+    // top and bottom
     for (int j = 1; j < cols - 1; j++)
     {
         my_map[j] = false;

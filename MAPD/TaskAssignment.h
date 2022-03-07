@@ -112,8 +112,9 @@ public:
 
             for (auto &entry : assignments[agent].path)
             {
-                file << "    - x: " << entry.location / map->cols << endl;
-                file << "      y: " << entry.location % map->cols << endl;
+                // Output, removing the border (-1)
+                file << "    - x: " << entry.location / (map->cols) - 1 << endl;
+                file << "      y: " << entry.location % (map->cols) - 1 << endl;
                 file << "      t: " << entry.timeStep << endl;
 
             }
