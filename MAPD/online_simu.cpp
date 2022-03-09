@@ -126,7 +126,10 @@ bool OnlineSimu::updateAgentStatus(int timestep){
 
             ActionEntry ae = actions[agentStatus[a->agent_id].prevAction+1];
             Task* task = ae.task;
-            Batch* batch = taskLoader->all_batches[task->batch_id];
+            Batch* batch;
+            if (is_batched) {
+                batch = taskLoader->all_batches[task->batch_id];
+            } 
             // update current load
             if(ae.action_type==ACTION_TYPE::PICK_UP){
                 assert(!agentStatus[a->agent_id].currentLoads.count(task));
