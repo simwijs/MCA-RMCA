@@ -55,7 +55,7 @@ void MapLoaderCost::loadKiva(string fname)
         {
             my_map[cols * i + j] = (line[j - 1] == '@'); // not a block
 
-            if (line[j - 1] == 'e' || line[j-1] == '.' || line[j-1] == 'r') // endpoint
+            if (line[j - 1] == 'e' || line[j - 1] == 'd') // endpoint
             {
                 endpoints.push_back(i * cols + j);
                 assert(ep == (endpoints.size() - 1));
