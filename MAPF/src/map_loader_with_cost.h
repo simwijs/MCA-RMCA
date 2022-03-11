@@ -13,6 +13,7 @@ public:
     MapLoaderCost(){};
     MapLoaderCost(std::string fname):MapLoader(fname){};
     vector<int> endpoints;
+    map<int, int> endpoints_map;
     vector<vector<hvals>> cost_map;
     void loadKiva(string fname);
     void initializeKivaMapCost();

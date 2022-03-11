@@ -57,7 +57,10 @@ void MapLoaderCost::loadKiva(string fname)
 
             if (line[j - 1] == 'e' || line[j - 1] == 'd') // endpoint
             {
-                endpoints.push_back(i * cols + j);
+                int actual_node = i*cols + j - (cols-1) - i*2;
+                int internal_node = i * cols + j;
+                endpoints.push_back(internal_node);
+                endpoints_map[actual_node] = internal_node;
                 assert(ep == (endpoints.size() - 1));
                 ep++;
             }

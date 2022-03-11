@@ -90,13 +90,13 @@ void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml, bool is_ba
         } else {
             batch_id = 0;
         }
-        s = s % ml.endpoints.size();
-        g = g % ml.endpoints.size();
 
-        assert(s < ml.endpoints.size());
-        assert(g < ml.endpoints.size());
-        Task *new_task = new Task(i, t, ml.endpoints[s], ml.endpoints[g], batch_id);
-        new_task->ideal_end_time = ml.getDistance(ml.endpoints[s], ml.endpoints[g]) + t;
+        // Convert the start and goal endpoint to the internal representation that includes a border/frame
+        int s3 = ml.endpoints_map[s];
+        int g3 = ml.endpoints_map[g];
+
+        Task *new_task = new Task(i, t, s3,g3, batch_id);
+        new_task->ideal_end_time = ml.getDistance(s3,g3) + t;
 
         if (t > last_release_time)
         {
