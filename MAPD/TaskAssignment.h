@@ -122,7 +122,6 @@ public:
     }
 
     void writeTasks(std::string filepath="task_output.yaml") const {
-
         fstream file;
         file.open(filepath, fstream::out);
         file << "tasks:" << endl;

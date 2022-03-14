@@ -244,9 +244,31 @@ int main(int argc, char** argv){
             taskAssignment->printAssignments();
             taskAssignment->printPath();
         }
-        taskAssignment->writePath();
-        taskAssignment->writeTasks();
 
+        // Get the filenames for output
+        char* mapptr = new char[map.size() + 1];
+        strcpy(mapptr, map.c_str());
+        char* ptr = strtok(mapptr, "/");
+        std::string latestMap = "";
+        std::string latestTask = "";
+        while (ptr != NULL) {
+            latestMap = std::string(ptr);
+            ptr = strtok(NULL, "/");
+        }
+
+        char* taskptr = new char[task.size() + 1];
+        strcpy(taskptr, task.c_str());
+        ptr = strtok(taskptr, "/");
+        while (ptr != NULL) {
+            latestTask = std::string(ptr);
+            ptr = strtok(NULL, "/");
+        }
+
+        taskAssignment->writePath("./output/output-" + latestMap + "--" + latestTask + ".yaml");
+        taskAssignment->writeTasks("./output/task_output-" + latestMap + "--" + latestTask + ".yaml");
+
+        delete mapptr;
+        delete taskptr;
         int ideal_cost = 0;
         int ideal_delay = 0;
         int total_cost = 0;
