@@ -72,14 +72,14 @@ void MapLoaderCost::loadKiva(string fname)
     // left and right
     for (int i = 0; i < rows; i++)
     {
-        my_map[i * cols] = false;
-        my_map[i * cols + cols - 1] = false;
+        my_map[i * cols] = true;
+        my_map[i * cols + cols - 1] = true;
     }
     // top and bottom
     for (int j = 1; j < cols - 1; j++)
     {
-        my_map[j] = false;
-        my_map[rows * cols - cols + j] = false;
+        my_map[j] = true;
+        my_map[rows * cols - cols + j] = true;
     }
     this->my_map = my_map;
     // Possible moves [WAIT, NORTH, EAST, SOUTH, WEST]
