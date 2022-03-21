@@ -5,7 +5,7 @@
 
 #ifndef MAPD_ONLINE_SIMU_H
 #define MAPD_ONLINE_SIMU_H
-
+#include <chrono>
 
 struct AgentStatus{
     Agent* agent;
@@ -24,9 +24,13 @@ public:
     bool updateAgentStatus(int timestep);
     bool haveCollision();
 
-        double runtime = 0;
+    std::chrono::duration<double, std::milli> runtime;
     double runtime_ta = 0;
-    double run_start = 0;
+    std::chrono::time_point<std::chrono::steady_clock>  run_start;
+
+    double getRuntime() {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(runtime).count();
+    }
 
 private:
     TaskAssignment* taskAssignment;
