@@ -217,7 +217,9 @@ int main(int argc, char** argv){
         taskAssignment = new TaskAssignmentRegretTask(agentLoader,taskLoader,mapLoader, ta_options, options1,real_cost,time_limit);
     }
     else if (s == constraint_strategy::PP && !regret){
-        cout<<"PP"<<endl;
+        if (screen>=1){
+            cout<<"PP"<<endl;
+        }
 
         taskAssignment = new TaskAssignmentPP(agentLoader,taskLoader,mapLoader, ta_options, options1,real_cost,time_limit);
     }
@@ -313,6 +315,20 @@ int main(int argc, char** argv){
                   //<< "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC << "," << taskAssignment->runtime_update_changed_agent / CLOCKS_PER_SEC << "," << taskAssignment->num_of_pp << "," << taskAssignment->num_conflict_updates << "," << taskAssignment->num_task_assign_updates << ","
                   << endl;
             stats.close();
+            std::cout << map << ","
+                  << task << ","
+                  << agentLoader->num_of_agents << ","
+                  << taskLoader->num_of_tasks << "," //<< ideal_cost << "," << total_cost << "," << ideal_delay << "," << total_delay
+                  << taskAssignment->current_makespan << ","
+                  << taskAssignment->current_total_service_time / (double) taskLoader->num_of_tasks << ","
+                  << taskAssignment->current_total_batch_service_time / (double) taskLoader->all_batches.size() << ","
+                  << taskAssignment->current_min_batch_service_time << ","
+                  << taskAssignment->current_max_batch_service_time << ","
+                  << online.getRuntime()
+                  //<< taskAssignment->get_num_agents_with_tasks() << "," << taskAssignment->runtime / CLOCKS_PER_SEC
+                  //<< "," << taskAssignment->runtime_pp / CLOCKS_PER_SEC
+                  //<< "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC << "," << taskAssignment->runtime_update_changed_agent / CLOCKS_PER_SEC << "," << taskAssignment->num_of_pp << "," << taskAssignment->num_conflict_updates << "," << taskAssignment->num_task_assign_updates << ","
+                  << endl;
         }
         if(vm.count("anytime")){
             if(vm["anytime-log"].as<string>() != ""){
