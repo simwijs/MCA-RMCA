@@ -307,7 +307,7 @@ int main(int argc, char** argv){
                   << taskAssignment->current_total_batch_service_time / (double) taskLoader->all_batches.size() << ","
                   << taskAssignment->current_min_batch_service_time << ","
                   << taskAssignment->current_max_batch_service_time << ","
-                  << online.getRuntime() << ","
+                  << online.getRuntime()
                   //<< taskAssignment->get_num_agents_with_tasks() << "," << taskAssignment->runtime / CLOCKS_PER_SEC
                   //<< "," << taskAssignment->runtime_pp / CLOCKS_PER_SEC
                   //<< "," << taskAssignment->runtime_update_conflict / CLOCKS_PER_SEC << "," << taskAssignment->runtime_update_changed_agent / CLOCKS_PER_SEC << "," << taskAssignment->num_of_pp << "," << taskAssignment->num_conflict_updates << "," << taskAssignment->num_task_assign_updates << ","

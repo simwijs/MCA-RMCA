@@ -85,9 +85,12 @@ void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml, bool is_ba
         ss.clear();
         ss << line;
         ss >> t >> s >> g >> ts >> tg; // time+start+goal+time at start+time at goal+batch
-        if (is_batched) {
+        if (is_batched)
+        {
             ss >> batch_id;
-        } else {
+        }
+        else
+        {
             batch_id = 0;
         }
 
@@ -95,8 +98,8 @@ void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml, bool is_ba
         int s3 = ml.endpoints_map[s];
         int g3 = ml.endpoints_map[g];
 
-        Task *new_task = new Task(i, t, s3,g3, batch_id);
-        new_task->ideal_end_time = ml.getDistance(s3,g3) + t;
+        Task *new_task = new Task(i, t, s3, g3, batch_id);
+        new_task->ideal_end_time = ml.getDistance(s3, g3) + t;
 
         if (t > last_release_time)
         {
@@ -105,7 +108,8 @@ void TaskLoader::loadKiva(const std::string fname, MapLoaderCost &ml, bool is_ba
         all_tasks.push(new_task);
         all_tasks_vec.push_back(new_task);
 
-        if (is_batched) {
+        if (is_batched)
+        {
             // Add batches only if there is no batch with that id yet, otherwise add task to the batch list
             if (batch_id > current_batch)
             {
@@ -162,11 +166,13 @@ bool Batch::is_finished()
 
 int Batch::get_service_time()
 {
-    // Loop through all tasks
-    int total = 0;
-    for (auto t : tasks)
+    if (!is_finished())
+        throw std::runtime_error("Cannot get service time when the batch isn't finished");
+    if (finished_time == -1 || initial_time == -1)
     {
-        total += t->get_service_time();
+        throw std::runtime_error(
+            "The appear or finished timestep is not set. Cannot get service "
+            "time");
     }
-    return total;
+    return finished_time - initial_time;
 }
