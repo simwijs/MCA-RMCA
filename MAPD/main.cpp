@@ -134,6 +134,7 @@ int main(int argc, char** argv){
 
     bool is_batched = false;
     if (vm.count("batched")) is_batched = true;
+
     if (vm.count("kiva")){
         mapLoader = new MapLoaderCost();
         agentLoader = new AgentLoader();

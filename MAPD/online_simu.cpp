@@ -183,9 +183,13 @@ bool OnlineSimu::updateAgentStatus(int timestep)
                             taskAssignment->current_min_batch_service_time = batch->get_service_time();
                         }
 
-                        batch->ble = current_batch_index - batch->batch_id;
-                        finished_batches.push_back(batch);
-                        current_batch_index++;
+                        // Not set already
+                        if (batch->ble == -1) {
+                            batch->ble = current_batch_index - batch->batch_id;
+                            if (batch->ble < 0) batch->ble = 0;
+                            finished_batches.push_back(batch);
+                            current_batch_index++;
+                        }
                     }
                 }
                 finished_tasks.insert(task->task_id);
