@@ -129,6 +129,7 @@ Batch::Batch(int id)
     batch_id = id;
     finished_time = -1;
     initial_time = -1;
+    ble = -1;
 }
 
 void Batch::add_task(Task *t)

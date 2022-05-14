@@ -70,6 +70,7 @@ public:
     int batch_id;
     int ideal_end_time;
     int finished_time;
+    int ble;
     vector<Task *> tasks;
 
     struct compare_Batch
